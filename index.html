@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>はてな鯖 - 非公式紹介サイト</title>
+    
+    <!-- ロゴ画像をローカルファイル(icon.gif)から最優先で読み込むように修正 -->
+    <link rel="preload" href="./icon.gif" as="image">
+
     <style>
         /* 基本設定とリセット */
         :root {
@@ -121,8 +125,7 @@
             text-align: center;
             padding: 100px 20px 60px;
             
-            /* ファイル名を title.png に修正 */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(18, 18, 18, 1)), url('./title.png');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(18, 18, 18, 0.5)), url('./title.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -138,6 +141,8 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
             transition: transform 0.3s ease;
             margin-bottom: 180px; 
+            /* 万が一画像が読み込めない時でもレイアウトが崩れないように背景色を設定 */
+            background-color: #333;
         }
         .logo:hover { transform: scale(1.05); }
 
@@ -443,7 +448,8 @@
 
     <!-- 背景画像が適用されたヘッダー -->
     <header>
-        <img src="https://www.hatenabot.net/image/icon.gif" alt="はてな鯖ロゴ" class="logo">
+        <!-- ロゴの読み込み先をローカルファイル（同じフォルダ内の icon.gif）に変更 -->
+        <img src="./icon.gif" alt="はてな鯖ロゴ" class="logo" fetchpriority="high">
         
         <p class="subtitle">〜白熱のPvPが楽しめるマインクラフトサーバー〜</p>
         
