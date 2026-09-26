@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>はてな鯖 - 非公式紹介サイト</title>
+    <style>
+        /* 基本設定とリセット */
+        :root {
+            --primary-color: #e53935;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #f5f5f5;
+            --text-sub: #aaaaaa;
+            --discord-color: #5865F2;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-top: 45px; 
+            transition: padding-top 0.3s ease;
+        }
+
+        /* 非公式注意バナー */
+        .warning-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffcc00;
+            color: #111;
+            text-align: center;
+            padding: 10px 40px 10px 10px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #111;
+            padding: 0 5px;
+        }
+        .close-btn:hover { color: var(--primary-color); }
+
+        /* ハンバーガーメニューボタン */
+        .menu-btn {
+            position: fixed;
+            top: 55px;
+            right: 15px;
+            font-size: 1.8rem;
+            color: #fff;
+            background: rgba(30, 30, 30, 0.8);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 900;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: top 0.3s ease, background 0.2s;
+        }
+        .menu-btn:hover { background: var(--primary-color); }
+
+        /* サイドメニュー */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -250px;
+            width: 250px;
+            height: 100vh;
+            background: #1a1a1a;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.5);
+            z-index: 1001;
+            transition: right 0.3s ease;
+            padding-top: 60px;
+        }
+        .side-menu.open { right: 0; }
+        .menu-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: #fff;
+            cursor: pointer;
+        }
+        .menu-close-btn:hover { color: var(--primary-color); }
+        .side-menu ul { list-style: none; }
+        .side-menu li { border-bottom: 1px solid #333; }
+        .side-menu a {
+            display: block;
+            padding: 15px 20px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: background 0.2s;
+        }
+        .side-menu a:hover { background: var(--primary-color); }
+
+        /* ヘッダー */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);
+        }
+        .logo {
+            width: 100px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(229, 57, 53, 0.4);
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .logo:hover { transform: scale(1.05); }
+        
+        /* タイトル画像のスタイル */
+        .header-title-img {
+            max-width: 100%;
+            height: auto;
+            max-height: 250px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+
+        .subtitle {
+            color: var(--text-sub);
+            font-size: 1rem;
+            margin-bottom: 25px;
+        }
+
+        /* アクションボタンコンテナ (IPとDiscord) */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        @media (min-width: 600px) {
+            .action-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        /* IPアドレス コピー部分 */
+        .ip-container {
+            display: inline-flex;
+            align-items: center;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            max-width: 100%;
+        }
+        .ip-text {
+            padding: 10px 15px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+        .ip-btn {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+            white-space: nowrap;
+            height: 100%;
+        }
+        .ip-btn:hover { background: #d32f2f; }
+        .ip-btn.copied { background: #4caf50; }
+
+        /* Discordボタン */
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--discord-color);
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: background-color 0.2s, transform 0.2s;
+            border: 2px solid var(--discord-color);
+        }
+        .discord-btn:hover {
+            background-color: #4752C4;
+            border-color: #4752C4;
+            transform: translateY(-2px);
+        }
+
+        /* コンテンツ部分 */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        section {
+            margin-bottom: 50px;
+            scroll-margin-top: 70px; 
+        }
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--card-bg);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        p { margin-bottom: 15px; }
+
+        /* グリッドレイアウト */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media (min-width: 768px) {
+            .grid { grid-template-columns: 1fr 1fr; }
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            border-top: 4px solid var(--primary-color);
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card h3 { margin-bottom: 12px; font-size: 1.2rem; }
+
+        /* タグ */
+        .tags-container {
+            margin-bottom: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .tag {
+            background-color: #333;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            border: 1px solid #444;
+            display: inline-flex;
+            align-items: center;
+            user-select: none;
+        }
+        .tag.clickable {
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .tag.clickable:hover {
+            background-color: #444;
+            border-color: var(--primary-color);
+        }
+        
+        /* モーダルUI */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-sub);
+            transition: color 0.2s;
+        }
+        .modal-close-btn:hover { color: var(--primary-color); }
+        .modal-title {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-desc {
+            color: var(--text-main);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        /* ルールリスト */
+        .rules-list { list-style: none; }
+        .rules-list li {
+            background: var(--card-bg);
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary-color);
+            display: flex;
+            align-items: flex-start;
+        }
+        .rules-list li::before {
+            content: "⚠️";
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .rule-title {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
+            color: #fff;
+        }
+
+        /* トップへ戻るボタン */
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: #fff;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, background 0.2s;
+            z-index: 800;
+        }
+        .scroll-top.show { opacity: 1; visibility: visible; }
+        .scroll-top:hover { background: #d32f2f; }
+
+        /* フッター */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-sub);
+            border-top: 1px solid #333;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            background: #111;
+        }
+        .creator {
+            color: #fff;
+            font-weight: bold;
+        }
+        .share-btn {
+            background: #333;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .share-btn:hover { background: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <!-- 上部固定の非公式バナー -->
+    <div class="warning-banner" id="warningBanner">
+        【注意】こちらのサイトは非公式サイトです。公式の運営様とは一切関係ありません。
+        <span class="close-btn" onclick="closeBanner()">✕</span>
+    </div>
+
+    <!-- ハンバーガーメニューボタン -->
+    <div class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰</div>
+
+    <!-- サイドメニュー -->
+    <nav class="side-menu" id="sideMenu">
+        <div class="menu-close-btn" onclick="toggleMenu()">✕</div>
+        <ul>
+            <li><a href="#about" onclick="toggleMenu()">はてな鯖とは？</a></li>
+            <li><a href="#modes" onclick="toggleMenu()">プレイできるモード</a></li>
+            <li><a href="#rules" onclick="toggleMenu()">ルール</a></li>
+        </ul>
+    </nav>
+
+    <!-- ヘッダー -->
+    <header>
+        <img src="https://www.hatenabot.net/image/icon.gif" alt="はてな鯖ロゴ" class="logo">
+        
+        <!-- シンプルにした画像ファイル名を指定しています -->
+        <div>
+            <img src="./title.png" alt="はてな鯖" class="header-title-img">
+        </div>
+        
+        <p class="subtitle">〜白熱のPvPが楽しめるマインクラフトサーバー〜</p>
+        
+        <div class="action-buttons">
+            <div class="ip-container">
+                <div class="ip-text" id="server-ip">mc.hatenabot.net</div>
+                <button class="ip-btn" id="copy-btn" onclick="copyIP()">IPをコピー</button>
+            </div>
+            <a href="https://discord.gg/hatena" target="_blank" rel="noopener noreferrer" class="discord-btn">
+                Discordに参加
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- サーバー紹介 -->
+        <section id="about">
+            <h2>はてな鯖とは？</h2>
+            <p>はてな鯖は、プレイヤー同士の熱いバトル（PvP）をメインに楽しめるマインクラフトサーバーです！</p>
+            <p>多彩な武器や専用のゲームモードが用意されており、腕を磨きたい戦闘好きのプレイヤーが集まる環境が整っています。</p>
+        </section>
+
+        <!-- おすすめポイント（グリッド） -->
+        <section id="modes">
+            <h2>プレイできるモード</h2>
+            <p style="color: var(--primary-color); font-weight: bold; font-size: 0.9rem; margin-bottom: 15px;">
+                👆 各タグをクリック・タップすると詳細が見れます！
+            </p>
+            <div class="grid">
+                <!-- カード1 -->
+                <div class="card">
+                    <h3>定番PvP & サバイバル</h3>
+                    <div class="tags-container">
+                        <span class="tag clickable" onclick="openModeModal('vanilla')">vanilla</span>
+                        <span class="tag clickable" onclick="openModeModal('axe')">axe</span>
+                        <span class="tag clickable" onclick="openModeModal('sword')">sword</span>
+                        <span class="tag clickable" onclick="openModeModal('smp')">smp</span>
+                        <span class="tag">npot</span>
+                    </div>
+                    <p>剣や斧を使ったクラシックなPvPから、実戦形式のPvPまで幅広く対応。自分の得意なスタイルで戦おう！</p>
+                </div>
+                <!-- カード2 -->
+                <div class="card">
+                    <h3>特殊武器 & ユニークバトル</h3>
+                    <div class="tags-container">
+                        <span class="tag clickable" onclick="openModeModal('creeper')">creeper</span>
+                        <span class="tag clickable" onclick="openModeModal('mace')">mace</span>
+                        <span class="tag clickable" onclick="openModeModal('spearMace')">spearMace</span>
+                    </div>
+                    <p>特殊な武器「メイス」類を使ったダイナミックな戦闘や、一風変わったルールでの白熱バトルが楽しめます。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ルール -->
+        <section id="rules">
+            <h2>サーバーのルール（一部抜粋）</h2>
+            <p style="color: var(--text-sub); font-size: 0.9rem;">
+                ※詳細は必ず<a href="https://discord.gg/hatena" target="_blank" style="color: var(--discord-color); text-decoration: underline;">公式Discord</a>等で確認してください。
+            </p>
+            <ul class="rules-list">
+                <li>
+                    <div>
+                        <span class="rule-title">ハッククライアント・チートの禁止</span>
+                        公平なPvP環境を保つため、不正ツールの使用は厳禁です。
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <span class="rule-title">暴言・迷惑行為の禁止</span>
+                        他のプレイヤーを不快にさせる発言や行動はやめましょう。
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <span class="rule-title">サーバーへの過度な負荷行為の禁止</span>
+                        意図的にラグを発生させる行為等はペナルティの対象となります。
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </div>
+
+    <!-- トップへ戻るボタン -->
+    <div class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()">↑</div>
+
+    <!-- フッター -->
+    <footer>
+        &copy; 2026 はてな鯖 非公式ファンサイト<br>
+        <span class="creator">制作者: SironukkoMC</span><br>
+        <button class="share-btn" onclick="shareSite()">🔗 このサイトをシェアする</button>
+    </footer>
+
+    <!-- モード詳細表示用のモーダル（ポップアップ） -->
+    <div class="modal-overlay" id="modeModal" onclick="closeModeModalOnBG(event)">
+        <div class="modal-content">
+            <span class="modal-close-btn" onclick="closeModeModal()">✕</span>
+            <h3 class="modal-title">
+                <span class="tag" id="modalTag"></span>
+            </h3>
+            <p class="modal-desc" id="modalDesc"></p>
+        </div>
+    </div>
+
+    <!-- JavaScript機能 -->
+    <script>
+        // サイドメニューの開閉
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('open');
+        }
+
+        // バナーを閉じる処理
+        function closeBanner() {
+            const banner = document.getElementById('warningBanner');
+            const menuBtn = document.getElementById('menuBtn');
+            banner.style.opacity = '0';
+            banner.style.visibility = 'hidden';
+            document.body.style.paddingTop = '0';
+            menuBtn.style.top = '15px';
+        }
+
+        // IPアドレスをコピーする処理
+        function copyIP() {
+            const ip = document.getElementById('server-ip').innerText;
+            const btn = document.getElementById('copy-btn');
+            
+            navigator.clipboard.writeText(ip).then(() => {
+                btn.innerText = "コピー完了！";
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerText = "IPをコピー";
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                const textArea = document.createElement("textarea");
+                textArea.value = ip;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    btn.innerText = "コピー完了！";
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.innerText = "IPをコピー";
+                        btn.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    alert('コピーに失敗しました。手動でコピーしてください。');
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+
+        // トップへ戻るボタン
+        window.addEventListener('scroll', () => {
+            const scrollBtn = document.getElementById('scrollTopBtn');
+            if (window.scrollY > 300) {
+                scrollBtn.classList.add('show');
+            } else {
+                scrollBtn.classList.remove('show');
+            }
+        });
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // シェア機能
+        function shareSite() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'はてな鯖 非公式紹介サイト',
+                    text: '白熱のPvPが楽しめるマインクラフトサーバー「はてな鯖」！',
+                    url: window.location.href
+                }).catch((error) => console.log('シェアがキャンセルされました', error));
+            } else {
+                alert('URLをコピーして共有してください！\n\n' + window.location.href);
+            }
+        }
+
+        // モーダル機能のデータと処理
+        const modeDescriptions = {
+            vanilla: "cpvp（クリスタルPvP）のことです。エンドクリスタルを駆使した高度な爆破戦闘がメインとなります。素早い設置と起爆のテクニックが勝利の鍵です。",
+            axe: "斧をメイン武器とするモード。一撃のダメージが大きく、盾のクールダウン管理や間合いの取り方が勝敗を分ける重厚なバトルです。",
+            sword: "剣をメイン武器とした、テンポの速いモード。コンボをつなげる技術や素早い動き（スプリントリセット等）が求められます。",
+            smp: "SMP（サバイバルマルチ）型のKitを用いたPvP。実際のサバイバルで集められるような装備やアイテム構成を駆使して戦う、より実戦的なモードです。",
+            creeper: "クリーパーの爆発を利用したり、爆発が関わる特殊ルールのPvP。爆風を利用したノックバックや大ダメージの計算など、トリッキーな戦い方が求められます。",
+            mace: "強力な武器「メイス」を使用したPvP。高所からの落下攻撃（スマッシュ）を決めることで大ダメージを狙う、立体的でダイナミックな戦闘が展開されます。",
+            spearMace: "「スピアメイス」という特殊な武器を用いるPvP。独自の攻撃範囲や戦い方を理解し、他のモードにはない戦術を組み立てる必要があります。"
+        };
+
+        function openModeModal(mode) {
+            const modal = document.getElementById('modeModal');
+            const tagEl = document.getElementById('modalTag');
+            const descEl = document.getElementById('modalDesc');
+
+            if (modeDescriptions[mode]) {
+                tagEl.innerText = mode;
+                descEl.innerText = modeDescriptions[mode];
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModeModal() {
+            const modal = document.getElementById('modeModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeModeModalOnBG(event) {
+            if (event.target.id === 'modeModal') {
+                closeModeModal();
+            }
+        }
+    </script>
+</body>
+</html>
