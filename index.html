@@ -116,37 +116,37 @@
         }
         .side-menu a:hover { background: var(--primary-color); }
 
-        /* ヘッダー */
+        /* ヘッダー（背景画像化） */
         header {
             text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);
+            padding: 100px 20px 60px; /* 背景を広く見せるための余白 */
+            
+            /* 画像を背景に設定し、下部を少し暗くして文字やサイトに馴染ませる */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(18, 18, 18, 1)), url('Screenshot%202026-09-26%2009.09.43_2.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            
+            position: relative;
+            border-bottom: 3px solid var(--primary-color);
         }
+        
         .logo {
-            width: 100px;
+            width: 90px;
             height: auto;
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(229, 57, 53, 0.4);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
             transition: transform 0.3s ease;
-            margin-bottom: 20px;
+            margin-bottom: 180px; /* 背景画像の文字を見せるためのスペース */
         }
         .logo:hover { transform: scale(1.05); }
-        
-        /* タイトル画像のスタイル */
-        .header-title-img {
-            max-width: 100%;
-            height: auto;
-            max-height: 250px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            margin-bottom: 15px;
-            object-fit: cover;
-        }
 
         .subtitle {
-            color: var(--text-sub);
-            font-size: 1rem;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
             margin-bottom: 25px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8); /* 背景の上でも読みやすくする影 */
         }
 
         /* アクションボタンコンテナ (IPとDiscord) */
@@ -171,7 +171,7 @@
             border: 2px solid var(--primary-color);
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             max-width: 100%;
         }
         .ip-text {
@@ -207,7 +207,7 @@
             padding: 10px 20px;
             border-radius: 8px;
             font-size: 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             transition: background-color 0.2s, transform 0.2s;
             border: 2px solid var(--discord-color);
         }
@@ -221,7 +221,7 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px 20px;
         }
         section {
             margin-bottom: 50px;
@@ -441,14 +441,9 @@
         </ul>
     </nav>
 
-    <!-- ヘッダー -->
+    <!-- 背景画像が適用されたヘッダー -->
     <header>
         <img src="https://www.hatenabot.net/image/icon.gif" alt="はてな鯖ロゴ" class="logo">
-        
-        <!-- シンプルにした画像ファイル名を指定しています -->
-        <div>
-            <img src="./title.png" alt="はてな鯖" class="header-title-img">
-        </div>
         
         <p class="subtitle">〜白熱のPvPが楽しめるマインクラフトサーバー〜</p>
         
